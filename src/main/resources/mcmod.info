@@ -1,0 +1,17 @@
+[
+{
+  "modid": "bonscampfire",
+  "name": "Bon's Campfire",
+  "version": "1.7.10",
+  "mcversion": "1.7.10",
+  "description": "A nice campfire.",
+  "credits": "",
+  "logoFile": "",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["Bon"],
+  "parent":"",
+  "screenshots": [],
+  "dependencies": []
+}
+]
