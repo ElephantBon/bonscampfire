@@ -56,42 +56,42 @@ public class BlockCampfire extends BlockContainer
     public void onBlockAdded(World p_149726_1_, int p_149726_2_, int p_149726_3_, int p_149726_4_)
     {
         super.onBlockAdded(p_149726_1_, p_149726_2_, p_149726_3_, p_149726_4_);
-        this.func_149930_e(p_149726_1_, p_149726_2_, p_149726_3_, p_149726_4_);
+//        this.func_149930_e(p_149726_1_, p_149726_2_, p_149726_3_, p_149726_4_);
     }
 
-    private void func_149930_e(World p_149930_1_, int p_149930_2_, int p_149930_3_, int p_149930_4_)
-    {
-        if (!p_149930_1_.isRemote)
-        {
-            Block block = p_149930_1_.getBlock(p_149930_2_, p_149930_3_, p_149930_4_ - 1);
-            Block block1 = p_149930_1_.getBlock(p_149930_2_, p_149930_3_, p_149930_4_ + 1);
-            Block block2 = p_149930_1_.getBlock(p_149930_2_ - 1, p_149930_3_, p_149930_4_);
-            Block block3 = p_149930_1_.getBlock(p_149930_2_ + 1, p_149930_3_, p_149930_4_);
-            byte b0 = 3;
-
-            if (block.func_149730_j() && !block1.func_149730_j())
-            {
-                b0 = 3;
-            }
-
-            if (block1.func_149730_j() && !block.func_149730_j())
-            {
-                b0 = 2;
-            }
-
-            if (block2.func_149730_j() && !block3.func_149730_j())
-            {
-                b0 = 5;
-            }
-
-            if (block3.func_149730_j() && !block2.func_149730_j())
-            {
-                b0 = 4;
-            }
-
-            p_149930_1_.setBlockMetadataWithNotify(p_149930_2_, p_149930_3_, p_149930_4_, b0, 2);
-        }
-    }
+//    private void func_149930_e(World p_149930_1_, int p_149930_2_, int p_149930_3_, int p_149930_4_)
+//    {
+//        if (!p_149930_1_.isRemote)
+//        {
+//            Block block = p_149930_1_.getBlock(p_149930_2_, p_149930_3_, p_149930_4_ - 1);
+//            Block block1 = p_149930_1_.getBlock(p_149930_2_, p_149930_3_, p_149930_4_ + 1);
+//            Block block2 = p_149930_1_.getBlock(p_149930_2_ - 1, p_149930_3_, p_149930_4_);
+//            Block block3 = p_149930_1_.getBlock(p_149930_2_ + 1, p_149930_3_, p_149930_4_);
+//            byte b0 = 3;
+//
+//            if (block.func_149730_j() && !block1.func_149730_j())
+//            {
+//                b0 = 3;
+//            }
+//
+//            if (block1.func_149730_j() && !block.func_149730_j())
+//            {
+//                b0 = 2;
+//            }
+//
+//            if (block2.func_149730_j() && !block3.func_149730_j())
+//            {
+//                b0 = 5;
+//            }
+//
+//            if (block3.func_149730_j() && !block2.func_149730_j())
+//            {
+//                b0 = 4;
+//            }
+//
+//            p_149930_1_.setBlockMetadataWithNotify(p_149930_2_, p_149930_3_, p_149930_4_, b0, 2);
+//        }
+//    }
 
     /**
      * Gets the block's texture. Args: side, meta
@@ -163,7 +163,7 @@ public class BlockCampfire extends BlockContainer
      */
     public static void updateCampfireBlockState(int litLevel, World world, int x, int y, int z)
     {
-        int l = world.getBlockMetadata(x, y, z);
+        //int l = world.getBlockMetadata(x, y, z);
         TileEntity tile = world.getTileEntity(x, y, z);
         changingBlock = true;
 
@@ -180,7 +180,7 @@ public class BlockCampfire extends BlockContainer
         }
 
         changingBlock = false;
-        world.setBlockMetadataWithNotify(x, y, z, l, 2);
+        //world.setBlockMetadataWithNotify(x, y, z, l, 2);
 
         if (tile != null) {
             tile.validate();
@@ -205,8 +205,7 @@ public class BlockCampfire extends BlockContainer
         l %= this.maxRotation;
 
         TileCampfire tile = (TileCampfire)world.getTileEntity(x, y, z);
-        tile.rotation = l;
-        
+        tile.rotation = l;        
         
         if (itemStack.hasDisplayName()) {
         	tile.func_145951_a(itemStack.getDisplayName());
