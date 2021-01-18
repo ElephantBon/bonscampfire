@@ -35,9 +35,9 @@ public class MainRegistry {
 	public static File Dir;
 	public static ConfigLoader Config;
 	@ConfigProp(
-		info = "Disable Chat Bubbles"
+		info = "Example config"
 	)
-	public static boolean EnableChatBubbles = true;	
+	public static boolean TestConfigField1 = true;	
 
 	public static Block blockCampfireUnlit;	
 	public static Block blockCampfireDying;
