@@ -19,7 +19,11 @@ import net.minecraft.item.ItemTool;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.Packet;
+import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
 
 public class TileCampfire extends TileEntity implements ISidedInventory
 {
@@ -141,44 +145,41 @@ public class TileCampfire extends TileEntity implements ISidedInventory
         this.field_145958_o = p_145951_1_;
     }
 
-    public void readFromNBT(NBTTagCompound p_145839_1_)
+    public void readFromNBT(NBTTagCompound compound)
     {
-        super.readFromNBT(p_145839_1_);
-        NBTTagList nbttaglist = p_145839_1_.getTagList("Items", 10);
+        super.readFromNBT(compound);
+        NBTTagList nbttaglist = compound.getTagList("Items", 10);
         this.campfireItemStacks = new ItemStack[this.getSizeInventory()];
+        this.rotation = compound.getInteger("TileRotation");
 
-        for (int i = 0; i < nbttaglist.tagCount(); ++i)
-        {
+        for (int i = 0; i < nbttaglist.tagCount(); ++i) {
             NBTTagCompound nbttagcompound1 = nbttaglist.getCompoundTagAt(i);
             byte b0 = nbttagcompound1.getByte("Slot");
 
-            if (b0 >= 0 && b0 < this.campfireItemStacks.length)
-            {
+            if (b0 >= 0 && b0 < this.campfireItemStacks.length) {
                 this.campfireItemStacks[b0] = ItemStack.loadItemStackFromNBT(nbttagcompound1);
             }
         }
 
-        this.campfireBurnTime = p_145839_1_.getShort("BurnTime");
-        this.campfireCookTime = p_145839_1_.getShort("CookTime");
+        this.campfireBurnTime = compound.getShort("BurnTime");
+        this.campfireCookTime = compound.getShort("CookTime");
         this.currentItemBurnTime = getItemBurnTime(this.campfireItemStacks[1]);
 
-        if (p_145839_1_.hasKey("CustomName", 8))
-        {
-            this.field_145958_o = p_145839_1_.getString("CustomName");
+        if (compound.hasKey("CustomName", 8)) {
+            this.field_145958_o = compound.getString("CustomName");
         }
     }
 
-    public void writeToNBT(NBTTagCompound p_145841_1_)
+    public void writeToNBT(NBTTagCompound compound)
     {
-        super.writeToNBT(p_145841_1_);
-        p_145841_1_.setShort("BurnTime", (short)this.campfireBurnTime);
-        p_145841_1_.setShort("CookTime", (short)this.campfireCookTime);
+        super.writeToNBT(compound);
+        compound.setShort("BurnTime", (short)this.campfireBurnTime);
+        compound.setShort("CookTime", (short)this.campfireCookTime);
+        compound.setInteger("TileRotation", this.rotation);
         NBTTagList nbttaglist = new NBTTagList();
 
-        for (int i = 0; i < this.campfireItemStacks.length; ++i)
-        {
-            if (this.campfireItemStacks[i] != null)
-            {
+        for (int i = 0; i < this.campfireItemStacks.length; ++i) {
+            if (this.campfireItemStacks[i] != null) {
                 NBTTagCompound nbttagcompound1 = new NBTTagCompound();
                 nbttagcompound1.setByte("Slot", (byte)i);
                 this.campfireItemStacks[i].writeToNBT(nbttagcompound1);
@@ -186,11 +187,10 @@ public class TileCampfire extends TileEntity implements ISidedInventory
             }
         }
 
-        p_145841_1_.setTag("Items", nbttaglist);
+        compound.setTag("Items", nbttaglist);
 
-        if (this.hasCustomInventoryName())
-        {
-            p_145841_1_.setString("CustomName", this.field_145958_o);
+        if (this.hasCustomInventoryName()) {
+            compound.setString("CustomName", this.field_145958_o);
         }
     }
 
@@ -490,5 +490,30 @@ public class TileCampfire extends TileEntity implements ISidedInventory
     public boolean canExtractItem(int p_102008_1_, ItemStack p_102008_2_, int p_102008_3_)
     {
         return p_102008_3_ != 0 || p_102008_1_ != 1 || p_102008_2_.getItem() == Items.bucket;
+    }
+    
+//    public boolean canUpdate() {
+//    	return false;
+//    }
+    
+    public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
+    	NBTTagCompound compound = pkt.func_148857_g();//pkt.getNbtCompound();
+    	this.readFromNBT(compound);
+    }
+   
+    public Packet getDescriptionPacket() {
+    	NBTTagCompound compound = new NBTTagCompound();
+    	this.writeToNBT(compound);
+    	compound.removeTag("Items");
+    	S35PacketUpdateTileEntity packet = new S35PacketUpdateTileEntity(super.xCoord, super.yCoord, super.zCoord, 0, compound);
+    	return packet;
+    }
+
+    public AxisAlignedBB getRenderBoundingBox() {
+    	return AxisAlignedBB.getBoundingBox((double)super.xCoord, (double)super.yCoord, (double)super.zCoord, (double)(super.xCoord + 1), (double)(super.yCoord + 1), (double)(super.zCoord + 1));
+    }
+
+    public int powerProvided() {
+    	return 0;
     }
 }

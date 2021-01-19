@@ -19,6 +19,7 @@ public class BlockCampfireRenderer extends BlockRendererInterface {
 
    public BlockCampfireRenderer() {
       ((BlockCampfire)MainRegistry.blockCampfireLit).renderId = RenderingRegistry.getNextAvailableRenderId();
+      ((BlockCampfire)MainRegistry.blockCampfireDying).renderId = ((BlockCampfire)MainRegistry.blockCampfireLit).renderId;
       ((BlockCampfire)MainRegistry.blockCampfireUnlit).renderId = ((BlockCampfire)MainRegistry.blockCampfireLit).renderId;
       RenderingRegistry.registerBlockHandler(this);
    }

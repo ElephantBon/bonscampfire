@@ -145,7 +145,7 @@ public class BlockCampfire extends BlockContainer
 	            		if (litSuccess) {
 	            			// Replace unlit campfire to dying campfire
 	            			tile.campfireBurnTime += 2;	// To consume fuel in TileCampfire.updateEntity
-	            			updateCampfireBlockState(1, world, x, y, z);
+	            			//updateCampfireBlockState(1, world, x, y, z);
 	            			return true;	// Event handled, don't open gui
 	            		}
 	            	}
@@ -163,7 +163,7 @@ public class BlockCampfire extends BlockContainer
      */
     public static void updateCampfireBlockState(int litLevel, World world, int x, int y, int z)
     {
-        //int l = world.getBlockMetadata(x, y, z);
+//        int l = world.getBlockMetadata(x, y, z);
         TileEntity tile = world.getTileEntity(x, y, z);
         changingBlock = true;
 
@@ -180,7 +180,7 @@ public class BlockCampfire extends BlockContainer
         }
 
         changingBlock = false;
-        //world.setBlockMetadataWithNotify(x, y, z, l, 2);
+//        world.setBlockMetadataWithNotify(x, y, z, l, 2);
 
         if (tile != null) {
             tile.validate();
@@ -242,38 +242,31 @@ public class BlockCampfire extends BlockContainer
 //        tile.rotation = l;
     }
 
-    public void breakBlock(World world, int x, int y, int z, Block p_149749_5_, int p_149749_6_)
+    public void breakBlock(World world, int x, int y, int z, Block block, int p_149749_6_)
     {
-        if (!changingBlock)
-        {
+        if (!changingBlock) {
             TileCampfire tile = (TileCampfire)world.getTileEntity(x, y, z);
 
-            if (tile != null)
-            {
-                for (int i1 = 0; i1 < tile.getSizeInventory(); ++i1)
-                {
+            if (tile != null) {
+                for (int i1 = 0; i1 < tile.getSizeInventory(); ++i1) {
                     ItemStack itemstack = tile.getStackInSlot(i1);
 
-                    if (itemstack != null)
-                    {
+                    if (itemstack != null) {
                         float f = this.field_149933_a.nextFloat() * 0.8F + 0.1F;
                         float f1 = this.field_149933_a.nextFloat() * 0.8F + 0.1F;
                         float f2 = this.field_149933_a.nextFloat() * 0.8F + 0.1F;
 
-                        while (itemstack.stackSize > 0)
-                        {
+                        while (itemstack.stackSize > 0) {
                             int j1 = this.field_149933_a.nextInt(21) + 10;
 
-                            if (j1 > itemstack.stackSize)
-                            {
+                            if (j1 > itemstack.stackSize) {
                                 j1 = itemstack.stackSize;
                             }
 
                             itemstack.stackSize -= j1;
                             EntityItem entityitem = new EntityItem(world, (double)((float)x + f), (double)((float)y + f1), (double)((float)z + f2), new ItemStack(itemstack.getItem(), j1, itemstack.getItemDamage()));
 
-                            if (itemstack.hasTagCompound())
-                            {
+                            if (itemstack.hasTagCompound()) {
                                 entityitem.getEntityItem().setTagCompound((NBTTagCompound)itemstack.getTagCompound().copy());
                             }
 
@@ -286,11 +279,11 @@ public class BlockCampfire extends BlockContainer
                     }
                 }
 
-                world.func_147453_f(x, y, z, p_149749_5_);
+                world.func_147453_f(x, y, z, block);
             }
         }
 
-        super.breakBlock(world, x, y, z, p_149749_5_, p_149749_6_);
+        super.breakBlock(world, x, y, z, block, p_149749_6_);
     }
 
     /**
